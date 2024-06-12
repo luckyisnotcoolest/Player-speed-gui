@@ -1,0 +1,59 @@
+-- Create a slider GUI
+local player = game.Players.LocalPlayer
+local playerGui = player.PlayerGui
+local slider = Instance.new("Slider")
+slider.Parent = playerGui
+slider.BackgroundColor3 = Color3.new(0, 0, 0) -- Black background
+slider.BorderColor3 = Color3.new(1, 1, 1) -- White border
+slider.BorderSizePixel = 2
+slider.Size = UDim2.new(0, 600, 0, 80) -- Larger size
+slider.Position = UDim2.new(0, 10, 0, 10)
+slider.MinValue = 0
+slider.MaxValue = 10000 -- Larger range
+slider.Value = 5000
+slider.Font = Enum.Font.SourceSans
+slider.FontSize = Enum.FontSize.Size24
+slider.TextColor3 = Color3.new(1, 1, 1) -- White text
+slider.TextStrokeColor3 = Color3.new(0, 0, 0) -- Black text stroke
+slider.TextStrokeTransparency = 0.5
+slider.TextXAlignment = Enum.TextXAlignment.Center
+
+-- Create a function to update the player's speed
+local function updateSpeed()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    if humanoid then
+        local speed = slider.Value / 100
+        humanoid.WalkSpeed = speed
+    end
+end
+
+-- Update the player's speed when the slider value changes
+slider.Changed:Connect(updateSpeed)
+
+-- Update the player's speed when the player spawns
+player.CharacterAdded:Connect(updateSpeed)
+
+-- Add a label to display the current speed
+local label = Instance.new("TextLabel")
+label.Parent = slider
+label.BackgroundColor3 = Color3.new(0, 0, 0) -- Black background
+label.BorderColor3 = Color3.new(1, 1, 1) -- White border
+label.BorderSizePixel = 2
+label.Size = UDim2.new(0, 200, 0, 40)
+label.Position = UDim2.new(0, 10, 0, 40)
+label.Font = Enum.Font.SourceSans
+label.FontSize = Enum.FontSize.Size24
+label.TextColor3 = Color3.new(1, 1, 1) -- White text
+label.TextStrokeColor3 = Color3.new(0, 0, 0) -- Black text stroke
+label.TextStrokeTransparency = 0.5
+label.TextXAlignment = Enum.TextXAlignment.Center
+
+-- Update the label text when the slider value changes
+slider.Changed:Connect(function()
+    local speed = slider.Value / 100
+    label.Text = "Speed: ".. tostring(math.floor(speed))
+end)
+
+-- Initialize the label text
+label.Text = "Speed: ".. tostring(math.floor(slider.Value / 100))
