@@ -1,0 +1,36 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local slider = Instance.new("Slider")
+slider.Parent = player.PlayerGui
+slider.Size = UDim2.new(0, 600, 0, 80)
+slider.Position = UDim2.new(0, 10, 0, 10)
+slider.MinValue = 0
+slider.MaxValue = 10000
+slider.Value = 5000
+
+local function updateSpeed()
+    humanoid.WalkSpeed = slider.Value / 100
+end
+
+slider.Changed:Connect(updateSpeed)
+
+local sliding = false
+
+UIS.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.LeftControl then
+        sliding = true
+        while sliding do
+            wait(0.1)
+            humanoid.WalkSpeed = humanoid.WalkSpeed + 5
+        end
+    end
+end)
+
+UIS.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.LeftControl then
+        sliding = false
+        humanoid.WalkSpeed = 16
+    end
+end)
